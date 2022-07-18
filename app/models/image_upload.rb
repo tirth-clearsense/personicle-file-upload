@@ -1,0 +1,3 @@
+class ImageUpload < ApplicationRecord
+
+end
