@@ -40,12 +40,12 @@ class UserImagesController < ApplicationController
     @user_image = UserImage.new(user_image_params)
     if @user_image.save
    
-    values = []
-    @user_image.images.blobs.each do |i|
-      values.append({
-        "question-id": "test",
-        "value": i.url
-      })
+      values = []
+      @user_image.images.blobs.each do |i|
+        values.append({
+          "question-id": "test",
+          "value": i.url
+        })
     
     end
      
@@ -56,7 +56,7 @@ class UserImagesController < ApplicationController
     #   })
     #  end
       #  create data packet and send to write api
-      data = {"streamName": "com.personicle.individual.datastreams.subjective.image_uploads", "individual_id": "test",
+      data = {"streamName": "com.personicle.individual.datastreams.subjective.image_uploads", "individual_id": "#{params[:user_image][:individual_id]}",
       "source": "Personicle:image_upload", "unit": "", "confidence": 100, "dataPoints":[
        { "timestamp": Time.now.strftime("%Y-%m-%d %H:%M:%S.%6N"),
          "value": values
