@@ -44,7 +44,7 @@ class UserImagesController < ApplicationController
       @user_image.images.blobs.each do |i|
         values.append({
           "question-id": "test",
-          "value": i.url
+          "value": i.url(expires_in: 10.days)
         })
     
     end
