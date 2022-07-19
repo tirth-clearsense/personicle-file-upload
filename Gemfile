@@ -1,13 +1,12 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.3"
+ruby "2.7.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.3", ">= 7.0.3.1"
 
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"
@@ -42,10 +41,10 @@ gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
 gem 'rest-client'
 gem "azure-storage-blob", require: false
-gem 'capistrano', '~> 3.4'
-gem 'capistrano-rbenv', '~> 2.2'
-gem 'capistrano-passenger', '~> 0.2.1'
-gem 'capistrano-rails', '~> 1.6', '>= 1.6.2'
+# gem 'capistrano', '~> 3.4'
+# gem 'capistrano-rbenv', '~> 2.2'
+# gem 'capistrano-passenger', '~> 0.2.1'
+# gem 'capistrano-rails', '~> 1.6', '>= 1.6.2'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
@@ -60,6 +59,13 @@ end
 gem "jsonapi-serializer", "~> 2.2"
 
 gem "pg", "~> 1.4"
+
+
+group :development do
+  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  gem "sqlite3", "~> 1.4"
+ 
+end
 group :production do
   gem 'rails_12factor'
 end
