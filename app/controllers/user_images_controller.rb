@@ -10,7 +10,6 @@ class UserImagesController < ApplicationController
   # GET /user_images
   def index
     @user_images = ImageUpload.all
-
     render json: @user_images
   end
   
