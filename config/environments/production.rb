@@ -1,7 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.routes.default_url_options = {
-  host: 'http://localhost:3001'
+  host: 'https://app.personice.org/file/upload'
 }
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.

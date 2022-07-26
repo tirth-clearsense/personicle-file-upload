@@ -45,6 +45,7 @@ gem 'capistrano', '~> 3.4'
 gem 'capistrano-rbenv', '~> 2.2'
 gem 'capistrano-passenger', '~> 0.2.1'
 gem 'capistrano-rails', '~> 1.6', '>= 1.6.2'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
@@ -69,3 +70,8 @@ end
 group :production do
   gem 'rails_12factor'
 end
+
+
+
+
+gem "addressable", "~> 2.8"
