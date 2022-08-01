@@ -135,8 +135,7 @@ class UserImagesController < ApplicationController
 
   def authenticate(request, image_key)
     begin
-      res = JSON.parse(RestClient::Request.execute(:url => ENV['AUTH_ENDPOINT'], headers: {Authorization: "#{request.headers["Authorization"]}"}, :method => :get,:verify_ssl => false ),object_class: OpenStruct)
-      puts res
+      res = JSON.parse(RestClient::Request.execute(:url => ENV['AUTH_ENDPOINT'] + "?user_id=#{request.params['user_id']}", headers: {Authorization: "#{request.headers["Authorization"]}"}, :method => :get,:verify_ssl => false ),object_class: OpenStruct)
     rescue => exception
        if exception.response.code == 401
         return false, "Unauthorized", :unauthorized
