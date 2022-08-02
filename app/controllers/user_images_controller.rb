@@ -47,7 +47,7 @@ class UserImagesController < ApplicationController
       'b',
       'r',
       '',
-      (Time.now + 9*60).utc.iso8601,
+      (Time.now + 6*60).utc.iso8601,
       ''
       # '2021-08-06'
     )
