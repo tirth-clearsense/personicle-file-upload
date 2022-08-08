@@ -47,13 +47,14 @@ class UserImagesController < ApplicationController
       'b',
       'r',
       '',
-      (Time.now + 10*60).utc.iso8601,
+      # (Time.now - 30 *60).utc.iso8601,
+      (Time.now + 15*60).utc.iso8601,
       ''
       # '2021-08-06'
     )
    
-    # puts image_url
-    image_url = URI.unescape(image_url)
+    puts image_url
+    # image_url = URI.unescape(image_url)
     render json: {"image_url": image_url}, status: :ok
    
   end
@@ -170,7 +171,7 @@ class UserImagesController < ApplicationController
   def create_signature(path = '/', resource = 'b', permissions = 'r', start = '', expiry = '', identifier = '')
     # If resource is a container, remove the last part (which is the filename)
     path = path.split('/').reverse.drop(1).reverse.join('/') if resource == 'c'
-    puts path
+    # puts path
     canonicalizedResource = "/#{ENV['AZURE_STORAGE_ACCOUNT']}/#{path}"
     # signed_version = '2018-11-09'
     stringToSign  = []
