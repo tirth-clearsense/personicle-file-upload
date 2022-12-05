@@ -317,6 +317,7 @@ DEPENDENCIES
   figaro
   image_processing (~> 1.2)
   jsonapi-serializer (~> 2.2)
+  mini_portile2
   omniauth-google-oauth2
   omniauth-oktaoauth
   omniauth-rails_csrf_protection
