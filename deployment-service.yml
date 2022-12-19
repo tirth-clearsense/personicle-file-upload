@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fileupload
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fileupload
+  template:
+    metadata:
+      labels:
+        app: fileupload
+    spec:
+      containers:
+      - env:
+        - name: PORT
+          value: "3000"
+        envFrom:
+        - configMapRef:
+            name: fileupload
+        image: personicleregistry.azurecr.io/fileupload:latest
+        imagePullPolicy: Always
+        name: fileupload
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fileupload-svc
+spec:
+  type: LoadBalancer
