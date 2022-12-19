@@ -30,4 +30,8 @@ kind: Service
 metadata:
   name: fileupload-svc
 spec:
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 3000
   type: LoadBalancer
