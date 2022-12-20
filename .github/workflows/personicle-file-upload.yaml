@@ -11,7 +11,7 @@ env:
     CLUSTER_RESOURCE_GROUP: personicle-rg
     CONTAINER_NAME: fileupload
     DEPLOYMENT_MANIFEST_PATH: |
-        deployment-service.yml
+        ./deployment-service.yml
 jobs:
     buildImage:
         permissions:
