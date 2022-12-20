@@ -19,7 +19,7 @@ spec:
         envFrom:
         - configMapRef:
             name: fileupload
-        image: personicleregistry.azurecr.io/fileupload:latest
+        image: personicleregistry.azurecr.io/fileupload:${{ github.sha }}
         imagePullPolicy: Always
         name: fileupload
         ports:
