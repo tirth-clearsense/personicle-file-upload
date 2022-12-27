@@ -35,3 +35,5 @@ spec:
     name: fileupload
     protocol: TCP
     targetPort: 3000
+  selector:
+    app: fileupload
