@@ -31,6 +31,7 @@ metadata:
   name: fileupload-svc
 spec:
   type: LoadBalancer
+  loadBalancerIP: 20.242.161.69
   ports:
   - port: 3000
     name: fileupload
