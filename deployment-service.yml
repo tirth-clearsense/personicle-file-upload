@@ -14,8 +14,6 @@ spec:
     spec:
       containers:
       - env:
-        - name: PORT
-          value: 3000
         envFrom:
         - configMapRef:
             name: fileupload
