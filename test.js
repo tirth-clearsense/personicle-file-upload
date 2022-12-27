@@ -20,6 +20,5 @@
 // );
 
 // const sasToken = generateBlobSASQueryParameters(sasOptions, sharedKeyCredential).toString();
-
 // blobUrl += sasToken;
 // console.log(blobUrl)
