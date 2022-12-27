@@ -1,59 +1,48 @@
-name: fileupload
-"on":
-    push:
-        branches:
-            - main
-    workflow_dispatch: {}
-env:
-    ACR_RESOURCE_GROUP: personicle-rg
-    AZURE_CONTAINER_REGISTRY: personicleRegistry
-    CLUSTER_NAME: personicle-aks-cluster
-    CLUSTER_RESOURCE_GROUP: personicle-rg
-    CONTAINER_NAME: fileupload
-    DEPLOYMENT_MANIFEST_PATH: |
-        ./deployment-service.yml
+on: [push]
 jobs:
-    buildImage:
-        permissions:
-            contents: read
-            id-token: write
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@master
-            - uses: azure/docker-login@v1
-              with:
-                login-server: personicleRegistry.azurecr.io
-                username: ${{ secrets.acr_personicleservices_username }}
-                password: ${{ secrets.acr_personicleservices_password }}
-            - name: Build and push image to ACR
-              run: |
-                docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t personicleRegistry.azurecr.io/fileupload:latest --label dockerfile-path=Dockerfile
-                docker push personicleRegistry.azurecr.io/fileupload:latest
-    deploy:
-        permissions:
-            actions: read
-            contents: read
-            id-token: write
-        runs-on: ubuntu-latest
-        needs:
-            - buildImage
-        steps:
-            - uses: actions/checkout@v3
-            - uses: azure/login@v1.4.3
-              name: Azure login
-              with:
-                client-id: ${{ secrets.AZURE_CLIENT_ID }}
-                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            - uses: azure/aks-set-context@v3
-              name: Get K8s context
-              with:
-                cluster-name: ${{ env.CLUSTER_NAME }}
-                resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
-            - uses: Azure/k8s-deploy@v4
-              name: Deploys application
-              with:
-                action: deploy
-                images: personicleRegistry.azurecr.io/fileupload:latest
-                manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
-                namespace: default
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: personicleRegistry.azurecr.io
+        username: ${{ secrets.acr_personicleservices_username }}
+        password: ${{ secrets.acr_personicleservices_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t personicleRegistry.azurecr.io/fileupload:${{ github.sha }} --label dockerfile-path=Dockerfile
+        docker push personicleRegistry.azurecr.io/fileupload:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_akspersonicledev_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep default | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace default`
+        fi
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: default
+        container-registry-url: personicleRegistry.azurecr.io
+        container-registry-username: ${{ secrets.acr_personicleservices_username }}
+        container-registry-password: ${{ secrets.acr_personicleservices_password }}
+        secret-name: akspersonicledockerauth
+       
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: default
+        manifests: |
+          ./deployment-service.yml
+        images: |
+          personicleRegistry.azurecr.io/fileupload:${{ github.sha }}
+        imagepullsecrets: |
+          akspersonicledockerauth
