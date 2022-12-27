@@ -19,15 +19,16 @@ jobs:
             id-token: write
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - uses: azure/login@v1.4.3
-              name: Azure login
+            - uses: actions/checkout@master
+            - uses: azure/docker-login@v1
               with:
-                client-id: ${{ secrets.AZURE_CLIENT_ID }}
-                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                login-server: personicleRegistry.azurecr.io
+                username: ${{ secrets.acr_personicleservices_username }}
+                password: ${{ secrets.acr_personicleservices_password }}
             - name: Build and push image to ACR
-              run: az acr build --image ${{ env.CONTAINER_NAME }}:latest --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.ACR_RESOURCE_GROUP }} -f ./Dockerfile ./
+              run: |
+                docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t personicleRegistry.azurecr.io/fileupload:latest --label dockerfile-path=Dockerfile
+                docker push personicleRegistry.azurecr.io/fileupload:latest
     deploy:
         permissions:
             actions: read
@@ -53,6 +54,6 @@ jobs:
               name: Deploys application
               with:
                 action: deploy
-                images: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:latest
+                images: personicleRegistry.azurecr.io/fileupload:latest
                 manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
                 namespace: default
