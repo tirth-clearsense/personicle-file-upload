@@ -19,8 +19,8 @@ class UserImage < ApplicationRecord
         if !i.content_type.in?(%('image/jpeg image/png image/jpg'))
             errors.add(:images, "needs to be a jpeg or png!")
         end
-        if i.byte_size > 6.megabytes
-            errors.add(:images,"should be less than 5MB")
+        if i.byte_size > 7.megabytes
+            errors.add(:images,"should be less than 7MB")
         end
     end
    
